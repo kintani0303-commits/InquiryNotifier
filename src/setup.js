@@ -7,6 +7,7 @@ function setup() {
 
   createConfigSheetIfMissing(ss);
   createRoutingSheetIfMissing(ss);
+  createReplySheetIfMissing(ss);
   deleteOwnTriggers();   // 二重登録を防ぐため、先に古いトリガーを消す
 
   ScriptApp.newTrigger('notifyOnSubmit')
@@ -45,14 +46,17 @@ function createConfigSheetIfMissing(ss) {
     return;   // すでにあれば何もしない(ユーザーが入力した設定を消さない)
   }
   const sheet = ss.insertSheet('設定');
-  sheet.getRange(1, 1, 5, 2).setValues([
+  sheet.getRange(1, 1, 7, 2).setValues([
     ['項目', '値'],
     ['通知先', Session.getEffectiveUser().getEmail()],
     ['ドライラン', true],
     ['回答シート名', 'フォームの回答 1'],
     ['CC', ''],
+    ['自動返信', false],
+    ['差出人名', ''],
   ]);
   sheet.getRange('B3').insertCheckboxes();
+  sheet.getRange('B6').insertCheckboxes();
 }
 
 /**
@@ -68,6 +72,20 @@ function createRoutingSheetIfMissing(ss) {
     ['見積依頼', ''],
     ['質問', ''],
     ['その他', ''],
+  ]);
+}
+
+/**
+ * 「自動返信」シートがなければ、ひな形入りで作成する
+ */
+function createReplySheetIfMissing(ss) {
+  if (ss.getSheetByName('自動返信')) {
+    return;   // すでにあれば何もしない(ユーザーが入力した設定を消さない)
+  }
+  const sheet = ss.insertSheet('自動返信');
+  sheet.getRange(1, 1, 2, 2).setValues([
+    ['件名', '【お問い合わせ受付】{{種別}}について'],
+    ['本文', '{{氏名}} 様\n\nこのたびはお問い合わせいただき、ありがとうございます。\n「{{種別}}」についてのお問い合わせを受け付けました。\n担当者より2営業日以内にご連絡いたします。\n\n※このメールは送信専用です。ご返信いただいてもお答えできません。'],
   ]);
 }
 

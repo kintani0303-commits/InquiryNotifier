@@ -1,6 +1,6 @@
 /**
  * 「設定」シートを読み込み、項目名をキーにしたオブジェクトで返す
- * 例: { '通知先': 'a@example.com', 'ドライラン': true, '回答シート名': 'フォームの回答 1', 'CC': '' }
+ * 例: { '通知先': 'a@example.com', 'ドライラン': true, '回答シート名': 'フォームの回答 1', 'CC': '', ... }
  */
 function getConfig() {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('設定');

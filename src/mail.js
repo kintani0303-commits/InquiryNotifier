@@ -21,14 +21,20 @@ function buildNotifyBody(name, type, content) {
 
 /**
  * メールを送信する。設定でドライランがオンなら送らずにログだけ残す
- * CC が設定されていれば CC にも送る
+ * useCc が true のとき、設定シートの CC にも送る(省略時は true)
  */
-function sendMail(config, to, subject, body) {
-  const cc = config['CC'] || '';
+function sendMail(config, to, subject, body, useCc = true) {
+  let cc = '';
+  if (useCc) {
+    cc = config['CC'] || '';
+  }
 
   const options = {};
   if (cc) {
     options.cc = cc;
+  }
+  if (config['差出人名']) {
+    options.name = config['差出人名'];
   }
 
   const ccText = cc || 'なし';

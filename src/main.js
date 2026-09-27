@@ -53,6 +53,7 @@ function notifyOnSubmit(e) {
     const to = getRecipientByType(type, config);
     const subject = `【新着】${type}:${name} 様`;
     sendMail(config, to, subject, buildNotifyBody(name, type, content));
+    sendAutoReply(config, answers);
   } catch (err) {
     writeLog('ERROR', err.message);
   }
